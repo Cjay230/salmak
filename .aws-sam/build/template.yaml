@@ -22,6 +22,10 @@ Resources:
       Environment:
         Variables:
           PARAM1: VALUE
+          TABLE_NAME: Salmak-Users
+      Policies:
+      - DynamoDBCrudPolicy:
+          TableName: Salmak-Users
       Events:
         SalmakApi:
           Type: Api
