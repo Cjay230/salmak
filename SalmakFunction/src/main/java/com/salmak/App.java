@@ -13,32 +13,41 @@ import java.util.Map;
  */
 public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    private final RegisterHandler registerHandler;
-    private final UserHandler     userHandler;
-    private final AlertHandler    alertHandler;
+    private final RegisterHandler  registerHandler;
+    private final UserHandler      userHandler;
+    private final AlertHandler     alertHandler;
+    private final GetAlertHandler  getAlertHandler;
 
     /** Production constructor. */
     public App() {
-        this.registerHandler = new RegisterHandler();
-        this.userHandler     = new UserHandler();
-        this.alertHandler    = new AlertHandler();
+        this.registerHandler  = new RegisterHandler();
+        this.userHandler      = new UserHandler();
+        this.alertHandler     = new AlertHandler();
+        this.getAlertHandler  = new GetAlertHandler();
     }
 
     /** Full test constructor — accepts pre-configured handlers. */
+    App(RegisterHandler registerHandler, UserHandler userHandler,
+        AlertHandler alertHandler, GetAlertHandler getAlertHandler) {
+        this.registerHandler  = registerHandler;
+        this.userHandler      = userHandler;
+        this.alertHandler     = alertHandler;
+        this.getAlertHandler  = getAlertHandler;
+    }
+
+    /** Convenience test constructor for register + user + alert tests. */
     App(RegisterHandler registerHandler, UserHandler userHandler, AlertHandler alertHandler) {
-        this.registerHandler = registerHandler;
-        this.userHandler     = userHandler;
-        this.alertHandler    = alertHandler;
+        this(registerHandler, userHandler, alertHandler, new GetAlertHandler());
     }
 
     /** Convenience test constructor for register + user tests. */
     App(RegisterHandler registerHandler, UserHandler userHandler) {
-        this(registerHandler, userHandler, new AlertHandler());
+        this(registerHandler, userHandler, new AlertHandler(), new GetAlertHandler());
     }
 
     /** Convenience test constructor for register-only tests. */
     App(RegisterHandler registerHandler) {
-        this(registerHandler, new UserHandler(), new AlertHandler());
+        this(registerHandler, new UserHandler(), new AlertHandler(), new GetAlertHandler());
     }
 
     @Override
@@ -56,6 +65,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
 
         if ("POST".equalsIgnoreCase(method) && "/alert".equals(path)) {
             return alertHandler.handle(input, context);
+        }
+
+        if ("GET".equalsIgnoreCase(method) && path != null && path.matches("/alert/.*")) {
+            return getAlertHandler.handle(input, context);
         }
 
         return response(404, "{\"message\":\"Not found\"}");

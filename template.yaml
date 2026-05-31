@@ -44,6 +44,11 @@ Resources:
           Properties:
             Path: /alert
             Method: post
+        GetAlert:
+          Type: Api
+          Properties:
+            Path: /alert/{phoneNumber}
+            Method: get
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
