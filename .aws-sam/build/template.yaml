@@ -32,6 +32,11 @@ Resources:
           Properties:
             Path: /register
             Method: post
+        GetUser:
+          Type: Api
+          Properties:
+            Path: /user/{phoneNumber}
+            Method: get
     Metadata:
       SamResourceId: SalmakFunction
 Outputs:

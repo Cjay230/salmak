@@ -14,15 +14,23 @@ import java.util.Map;
 public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private final RegisterHandler registerHandler;
+    private final UserHandler userHandler;
 
     /** Production constructor. */
     public App() {
         this.registerHandler = new RegisterHandler();
+        this.userHandler     = new UserHandler();
     }
 
-    /** Test constructor — accepts a pre-configured handler (e.g. with a stub DynamoDB client). */
-    App(RegisterHandler registerHandler) {
+    /** Test constructor — accepts pre-configured handlers. */
+    App(RegisterHandler registerHandler, UserHandler userHandler) {
         this.registerHandler = registerHandler;
+        this.userHandler     = userHandler;
+    }
+
+    /** Convenience test constructor for register-only tests. */
+    App(RegisterHandler registerHandler) {
+        this(registerHandler, new UserHandler());
     }
 
     @Override
@@ -32,6 +40,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
 
         if ("POST".equalsIgnoreCase(method) && "/register".equals(path)) {
             return registerHandler.handle(input, context);
+        }
+
+        if ("GET".equalsIgnoreCase(method) && path != null && path.matches("/user/.*")) {
+            return userHandler.handle(input, context);
         }
 
         return response(404, "{\"message\":\"Not found\"}");

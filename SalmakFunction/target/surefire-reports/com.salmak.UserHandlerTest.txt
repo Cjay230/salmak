@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.salmak.AppTest
+Test set: com.salmak.UserHandlerTest
 -------------------------------------------------------------------------------
-Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.234 s -- in com.salmak.AppTest
+Tests run: 6, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0 s -- in com.salmak.UserHandlerTest

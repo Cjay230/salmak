@@ -34,6 +34,11 @@ Resources:
           Properties:
             Path: /register
             Method: post
+        GetUser:
+          Type: Api
+          Properties:
+            Path: /user/{phoneNumber}
+            Method: get
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
