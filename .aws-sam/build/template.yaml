@@ -1,0 +1,49 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: 'salmak
+
+  Sample SAM Template for salmak
+
+  '
+Globals:
+  Function:
+    Timeout: 20
+    MemorySize: 512
+Resources:
+  SalmakFunction:
+    Type: AWS::Serverless::Function
+    Properties:
+      CodeUri: SalmakFunction
+      Handler: com.salmak.App::handleRequest
+      Runtime: java21
+      Architectures:
+      - x86_64
+      MemorySize: 512
+      Environment:
+        Variables:
+          PARAM1: VALUE
+      Events:
+        SalmakApi:
+          Type: Api
+          Properties:
+            Path: /hello
+            Method: get
+    Metadata:
+      SamResourceId: SalmakFunction
+Outputs:
+  SalmakApi:
+    Description: API Gateway endpoint URL for Prod stage for Salmak function
+    Value:
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/hello/
+  SalmakFunction:
+    Description: Salmak Lambda Function ARN
+    Value:
+      Fn::GetAtt:
+      - SalmakFunction
+      - Arn
+  SalmakFunctionIamRole:
+    Description: Implicit IAM Role created for Salmak function
+    Value:
+      Fn::GetAtt:
+      - SalmakFunctionRole
+      - Arn
