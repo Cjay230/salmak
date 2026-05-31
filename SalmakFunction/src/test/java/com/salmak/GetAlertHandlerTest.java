@@ -18,13 +18,25 @@ public class GetAlertHandlerTest {
     // Stubs
     // -----------------------------------------------------------------------
 
-    /** User exists with an activeAlert field. */
+    /** User exists with an activeAlert field — clean JSON (new format). */
     private static DynamoDbClient withAlertStub() {
         return stub(GetItemResponse.builder()
                 .item(Map.of(
                         "phoneNumber", AttributeValue.builder().s("+96170000000").build(),
                         "activeAlert", AttributeValue.builder()
                                 .s("{\"lat\":33.8547,\"lng\":35.4942,\"timestamp\":\"2026-05-31T10:00:00Z\"}")
+                                .build()
+                ))
+                .build());
+    }
+
+    /** User exists with an activeAlert field — escaped JSON (old/live format). */
+    private static DynamoDbClient withEscapedAlertStub() {
+        return stub(GetItemResponse.builder()
+                .item(Map.of(
+                        "phoneNumber", AttributeValue.builder().s("+96170000000").build(),
+                        "activeAlert", AttributeValue.builder()
+                                .s("{\\\"lat\\\":33.854700,\\\"lng\\\":35.494200,\\\"timestamp\\\":\\\"2026-05-31T17:21:40.836762642Z\\\"}")
                                 .build()
                 ))
                 .build());
@@ -112,6 +124,19 @@ public class GetAlertHandlerTest {
         assertTrue(body.contains("\"lat\""));
         assertTrue(body.contains("\"lng\""));
         assertTrue(body.contains("\"timestamp\""));
+        assertTrue(body.contains("\"evacuationRoute\""));
+        assertTrue(body.contains("https://www.google.com/maps/dir/?api=1&destination=33.8547,35.4942"));
+    }
+
+    @Test
+    public void userExistsWithEscapedAlert_evacuationRouteCorrectlyParsed() {
+        GetAlertHandler handler = new GetAlertHandler(withEscapedAlertStub());
+        APIGatewayProxyResponseEvent res = getAlert(handler, "+96170000000");
+        assertEquals(200, res.getStatusCode().intValue());
+        String body = res.getBody();
+        assertTrue(body.contains("\"hasAlert\":true"));
+        assertTrue(body.contains("\"evacuationRoute\""));
+        assertTrue(body.contains("https://www.google.com/maps/dir/?api=1&destination=33.8547,35.4942"));
     }
 
     @Test
@@ -138,6 +163,8 @@ public class GetAlertHandlerTest {
         APIGatewayProxyResponseEvent res = app.handleRequest(req, null);
         assertEquals(200, res.getStatusCode().intValue());
         assertTrue(res.getBody().contains("\"hasAlert\":true"));
+        assertTrue(res.getBody().contains("evacuationRoute"));
+        assertTrue(res.getBody().contains("https://www.google.com/maps/dir/?api=1&destination="));
     }
 
     // -----------------------------------------------------------------------

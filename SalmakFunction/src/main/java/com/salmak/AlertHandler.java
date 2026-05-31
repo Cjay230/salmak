@@ -145,8 +145,10 @@ public class AlertHandler {
     // -----------------------------------------------------------------------
 
     private void stampActiveAlert(String phoneNumber, double lat, double lng, String timestamp) {
+        // Store a clean JSON string — no manual escaping needed here.
+        // String.format produces: {"lat":33.854700,"lng":35.494200,"timestamp":"..."}
         String alertJson = String.format(
-                "{\\\"lat\\\":%.6f,\\\"lng\\\":%.6f,\\\"timestamp\\\":\\\"%s\\\"}",
+                "{\"lat\":%.6f,\"lng\":%.6f,\"timestamp\":\"%s\"}",
                 lat, lng, timestamp);
 
         getDynamo().updateItem(UpdateItemRequest.builder()

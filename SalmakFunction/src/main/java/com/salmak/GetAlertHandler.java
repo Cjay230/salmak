@@ -4,6 +4,8 @@ import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.LambdaLogger;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import software.amazon.awssdk.services.dynamodb.DynamoDbClient;
 import software.amazon.awssdk.services.dynamodb.model.AttributeValue;
 import software.amazon.awssdk.services.dynamodb.model.GetItemRequest;
@@ -24,7 +26,10 @@ import java.util.Map;
  */
 public class GetAlertHandler {
 
-    private static final String TABLE_NAME = System.getenv("TABLE_NAME");
+    private static final String       TABLE_NAME = System.getenv("TABLE_NAME");
+    private static final ObjectMapper MAPPER     = new ObjectMapper();
+    private static final String       MAPS_BASE  =
+            "https://www.google.com/maps/dir/?api=1&destination=";
 
     // Lazy singleton — only created on first real invocation
     private static final class DynamoHolder {
@@ -89,9 +94,26 @@ public class GetAlertHandler {
 
         // --- Active alert present ---
         String alertJson = item.get("activeAlert").s();
-        // alertJson is already a JSON string stored as a DynamoDB String attribute;
-        // embed it directly into the response body.
-        String body = String.format("{\"hasAlert\":true,\"alert\":%s}", alertJson);
+
+        // Defensively unescape — records written by older deployments may contain
+        // literal backslash-quote sequences (e.g. {\"lat\":...}) instead of clean JSON.
+        String parseable = alertJson.replace("\\\"", "\"");
+
+        // Parse lat/lng from the stored alert JSON to build the evacuation route URL
+        String evacuationRoute = "";
+        try {
+            JsonNode alertNode = MAPPER.readTree(parseable);
+            double lat = alertNode.get("lat").asDouble();
+            double lng = alertNode.get("lng").asDouble();
+            evacuationRoute = MAPS_BASE + lat + "," + lng;
+        } catch (Exception e) {
+            logger.log("Failed to parse alert coordinates for evacuation route: " + e.getMessage());
+        }
+
+        // Embed the clean (unescaped) JSON in the response so the client receives valid JSON
+        String body = String.format(
+                "{\"hasAlert\":true,\"alert\":%s,\"evacuationRoute\":\"%s\"}",
+                parseable, evacuationRoute);
         return App.response(200, body);
     }
 }
