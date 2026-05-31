@@ -14,23 +14,31 @@ import java.util.Map;
 public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
     private final RegisterHandler registerHandler;
-    private final UserHandler userHandler;
+    private final UserHandler     userHandler;
+    private final AlertHandler    alertHandler;
 
     /** Production constructor. */
     public App() {
         this.registerHandler = new RegisterHandler();
         this.userHandler     = new UserHandler();
+        this.alertHandler    = new AlertHandler();
     }
 
-    /** Test constructor — accepts pre-configured handlers. */
-    App(RegisterHandler registerHandler, UserHandler userHandler) {
+    /** Full test constructor — accepts pre-configured handlers. */
+    App(RegisterHandler registerHandler, UserHandler userHandler, AlertHandler alertHandler) {
         this.registerHandler = registerHandler;
         this.userHandler     = userHandler;
+        this.alertHandler    = alertHandler;
+    }
+
+    /** Convenience test constructor for register + user tests. */
+    App(RegisterHandler registerHandler, UserHandler userHandler) {
+        this(registerHandler, userHandler, new AlertHandler());
     }
 
     /** Convenience test constructor for register-only tests. */
     App(RegisterHandler registerHandler) {
-        this(registerHandler, new UserHandler());
+        this(registerHandler, new UserHandler(), new AlertHandler());
     }
 
     @Override
@@ -44,6 +52,10 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
 
         if ("GET".equalsIgnoreCase(method) && path != null && path.matches("/user/.*")) {
             return userHandler.handle(input, context);
+        }
+
+        if ("POST".equalsIgnoreCase(method) && "/alert".equals(path)) {
+            return alertHandler.handle(input, context);
         }
 
         return response(404, "{\"message\":\"Not found\"}");

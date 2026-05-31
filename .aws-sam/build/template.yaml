@@ -37,6 +37,11 @@ Resources:
           Properties:
             Path: /user/{phoneNumber}
             Method: get
+        PostAlert:
+          Type: Api
+          Properties:
+            Path: /alert
+            Method: post
     Metadata:
       SamResourceId: SalmakFunction
 Outputs:

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.UserHandlerTest" time="0.007" tests="6" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.AlertHandlerTest" time="0.24" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -59,23 +59,37 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="routingViaApp_getUser_found" classname="com.salmak.UserHandlerTest" time="0.003">
-    <system-out><![CDATA[Looking up user: +96170000000
+  <testcase name="mixedUsers_onlyNearbyAlerted" classname="com.salmak.AlertHandlerTest" time="0.198">
+    <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
+Alerted user: +96170000003
+Alerted user: +96170000005
+Alert complete — users alerted: 2
 ]]></system-out>
   </testcase>
-  <testcase name="userFound_returns200WithRegisteredTrueAndData" classname="com.salmak.UserHandlerTest" time="0.0">
-    <system-out><![CDATA[Looking up user: +96170000000
+  <testcase name="oneUserBeyond500m_isNotAlerted" classname="com.salmak.AlertHandlerTest" time="0.0">
+    <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
+Alert complete — users alerted: 0
 ]]></system-out>
   </testcase>
-  <testcase name="userNotFound_returns200WithRegisteredFalse" classname="com.salmak.UserHandlerTest" time="0.002">
-    <system-out><![CDATA[Looking up user: +96170000000
+  <testcase name="haversine_samePoint_isZero" classname="com.salmak.AlertHandlerTest" time="0.0"/>
+  <testcase name="missingLat_returns400" classname="com.salmak.AlertHandlerTest" time="0.0"/>
+  <testcase name="haversine_within500m_detected" classname="com.salmak.AlertHandlerTest" time="0.0"/>
+  <testcase name="haversine_beyond500m_notDetected" classname="com.salmak.AlertHandlerTest" time="0.0"/>
+  <testcase name="noUsersInTable_returns200WithZeroAlerted" classname="com.salmak.AlertHandlerTest" time="0.0">
+    <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
+Alert complete — users alerted: 0
 ]]></system-out>
   </testcase>
-  <testcase name="blankPhoneNumber_returns400" classname="com.salmak.UserHandlerTest" time="0.0"/>
-  <testcase name="missingPhoneNumber_returns400" classname="com.salmak.UserHandlerTest" time="0.0"/>
-  <testcase name="dynamoError_returns500" classname="com.salmak.UserHandlerTest" time="0.001">
-    <system-out><![CDATA[Looking up user: +96170000000
-DynamoDB lookup failed: DynamoDB unavailable
+  <testcase name="oneUserWithin500m_isAlerted" classname="com.salmak.AlertHandlerTest" time="0.0">
+    <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
+Alerted user: +96170000001
+Alert complete — users alerted: 1
 ]]></system-out>
   </testcase>
+  <testcase name="missingBody_returns400" classname="com.salmak.AlertHandlerTest" time="0.0">
+    <system-out><![CDATA[Failed to parse alert body: Unrecognized token 'not': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
+ at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 4]
+]]></system-out>
+  </testcase>
+  <testcase name="missingLng_returns400" classname="com.salmak.AlertHandlerTest" time="0.0"/>
 </testsuite>
