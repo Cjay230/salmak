@@ -1,48 +1,46 @@
 package com.salmak;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.amazonaws.services.lambda.runtime.Context;
 import com.amazonaws.services.lambda.runtime.RequestHandler;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyRequestEvent;
 import com.amazonaws.services.lambda.runtime.events.APIGatewayProxyResponseEvent;
 
+import java.util.Map;
+
 /**
- * Handler for requests to Lambda function.
+ * Main Lambda entry point. Routes requests to the appropriate handler
+ * based on HTTP method and path.
  */
 public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatewayProxyResponseEvent> {
 
-    public APIGatewayProxyResponseEvent handleRequest(final APIGatewayProxyRequestEvent input, final Context context) {
-        Map<String, String> headers = new HashMap<>();
-        headers.put("Content-Type", "application/json");
-        headers.put("X-Custom-Header", "application/json");
+    private final RegisterHandler registerHandler;
 
-        APIGatewayProxyResponseEvent response = new APIGatewayProxyResponseEvent()
-                .withHeaders(headers);
-        try {
-            final String pageContents = this.getPageContents("https://checkip.amazonaws.com");
-            String output = String.format("{ \"message\": \"hello world\", \"location\": \"%s\" }", pageContents);
-
-            return response
-                    .withStatusCode(200)
-                    .withBody(output);
-        } catch (IOException e) {
-            return response
-                    .withBody("{}")
-                    .withStatusCode(500);
-        }
+    /** Production constructor. */
+    public App() {
+        this.registerHandler = new RegisterHandler();
     }
 
-    private String getPageContents(String address) throws IOException{
-        URL url = new URL(address);
-        try(BufferedReader br = new BufferedReader(new InputStreamReader(url.openStream()))) {
-            return br.lines().collect(Collectors.joining(System.lineSeparator()));
+    /** Test constructor — accepts a pre-configured handler (e.g. with a stub DynamoDB client). */
+    App(RegisterHandler registerHandler) {
+        this.registerHandler = registerHandler;
+    }
+
+    @Override
+    public APIGatewayProxyResponseEvent handleRequest(APIGatewayProxyRequestEvent input, Context context) {
+        String method = input.getHttpMethod();
+        String path   = input.getPath();
+
+        if ("POST".equalsIgnoreCase(method) && "/register".equals(path)) {
+            return registerHandler.handle(input, context);
         }
+
+        return response(404, "{\"message\":\"Not found\"}");
+    }
+
+    static APIGatewayProxyResponseEvent response(int statusCode, String body) {
+        return new APIGatewayProxyResponseEvent()
+                .withStatusCode(statusCode)
+                .withHeaders(Map.of("Content-Type", "application/json"))
+                .withBody(body);
     }
 }

@@ -29,11 +29,11 @@ Resources:
         - DynamoDBCrudPolicy:
             TableName: Salmak-Users
       Events:
-        SalmakApi:
-          Type: Api # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#api
+        RegisterUser:
+          Type: Api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /register
+            Method: post
 
 Outputs:
   # ServerlessRestApi is an implicit API created out of Events key under Serverless::Function
@@ -41,7 +41,7 @@ Outputs:
   # https://github.com/awslabs/serverless-application-model/blob/master/docs/internals/generated_resources.rst#api
   SalmakApi:
     Description: "API Gateway endpoint URL for Prod stage for Salmak function"
-    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/hello/"
+    Value: !Sub "https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/register/"
   SalmakFunction:
     Description: "Salmak Lambda Function ARN"
     Value: !GetAtt SalmakFunction.Arn

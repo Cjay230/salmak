@@ -27,18 +27,18 @@ Resources:
       - DynamoDBCrudPolicy:
           TableName: Salmak-Users
       Events:
-        SalmakApi:
+        RegisterUser:
           Type: Api
           Properties:
-            Path: /hello
-            Method: get
+            Path: /register
+            Method: post
     Metadata:
       SamResourceId: SalmakFunction
 Outputs:
   SalmakApi:
     Description: API Gateway endpoint URL for Prod stage for Salmak function
     Value:
-      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/hello/
+      Fn::Sub: https://${ServerlessRestApi}.execute-api.${AWS::Region}.${AWS::URLSuffix}/Prod/register/
   SalmakFunction:
     Description: Salmak Lambda Function ARN
     Value:
