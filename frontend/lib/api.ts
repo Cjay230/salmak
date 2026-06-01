@@ -28,10 +28,10 @@ export async function checkUser(phoneNumber: string): Promise<UserResponse> {
 }
 
 export async function getAlert(phoneNumber: string): Promise<AlertResponse> {
-  const res = await fetch(
-    `${API_BASE}/alert/${encodeURIComponent(phoneNumber)}`,
-    { cache: 'no-store' }
-  );
+  const url = `${API_BASE}/alert/${phoneNumber}`;
+  console.log('[Salmak] GET', url);
+  const res = await fetch(url, { cache: 'no-store' });
+  console.log('[Salmak] status:', res.status);
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }
