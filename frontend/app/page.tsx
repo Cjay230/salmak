@@ -3,7 +3,9 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Logo from '@/components/Logo';
-import { sendVerificationCode, verifyCode } from '@/lib/api';
+import { checkUser } from '@/lib/api';
+
+const SIMULATED_CODE = '1234';
 
 export default function LoginPage() {
   const router = useRouter();
@@ -15,40 +17,40 @@ export default function LoginPage() {
 
   const fullPhone = `+961${phone.replace(/^0+/, '').replace(/\s/g, '')}`;
 
-  const handleSendCode = async () => {
+  // Step 1 — validate phone and move to code entry
+  const handleSendCode = () => {
     if (!phone.trim()) {
       setError('الرجاء إدخال رقم الهاتف — Please enter your phone number');
       return;
     }
-    setLoading(true);
     setError('');
-    try {
-      await sendVerificationCode(fullPhone);
-      setStep('code');
-    } catch {
-      setError('فشل إرسال الرمز — Failed to send code. Please try again.');
-    } finally {
-      setLoading(false);
-    }
+    setStep('code');
   };
 
+  // Step 2 — verify code locally, then call GET /user/{phoneNumber}
   const handleVerify = async () => {
-    if (!code.trim() || code.length < 4) {
+    if (!code.trim()) {
       setError('الرجاء إدخال رمز التحقق — Please enter the verification code');
       return;
     }
+
+    if (code !== SIMULATED_CODE) {
+      setError('رمز غير صحيح — Invalid code. Please try again.');
+      return;
+    }
+
     setLoading(true);
     setError('');
     try {
-      const result = await verifyCode(fullPhone, code);
+      const user = await checkUser(fullPhone);
       localStorage.setItem('salmak_phone', fullPhone);
-      if (result.isNewUser) {
-        router.push('/setup');
-      } else {
+      if (user.registered) {
         router.push('/home');
+      } else {
+        router.push('/setup');
       }
     } catch {
-      setError('رمز غير صحيح — Invalid code. Please try again.');
+      setError('حدث خطأ — Something went wrong. Please try again.');
     } finally {
       setLoading(false);
     }
@@ -94,17 +96,9 @@ export default function LoginPage() {
 
               <button
                 onClick={handleSendCode}
-                disabled={loading}
-                className="w-full bg-sky-500 hover:bg-sky-600 active:bg-sky-700 disabled:bg-sky-300 text-white font-semibold py-4 rounded-2xl transition-colors duration-200 text-base"
+                className="w-full bg-sky-500 hover:bg-sky-600 active:bg-sky-700 text-white font-semibold py-4 rounded-2xl transition-colors duration-200 text-base"
               >
-                {loading ? (
-                  <span className="flex items-center justify-center gap-2">
-                    <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
-                    جارٍ الإرسال...
-                  </span>
-                ) : (
-                  'أرسل الرمز — Send Code'
-                )}
+                أرسل الرمز — Send Code
               </button>
             </>
           ) : (
@@ -117,7 +111,7 @@ export default function LoginPage() {
                   أدخل رمز التحقق
                 </p>
                 <p className="text-gray-400 text-sm mt-0.5">
-                  Enter the code sent to {fullPhone}
+                  Code sent! Enter: <span className="font-bold text-sky-500">1234</span>
                 </p>
               </div>
 
@@ -128,10 +122,10 @@ export default function LoginPage() {
                   value={code}
                   onChange={(e) => setCode(e.target.value.replace(/\D/g, ''))}
                   onKeyDown={(e) => e.key === 'Enter' && handleVerify()}
-                  placeholder="• • • • • •"
+                  placeholder="• • • •"
                   className="w-full border-2 border-gray-200 rounded-2xl px-4 py-4 text-center text-3xl font-mono tracking-[0.5em] outline-none focus:border-sky-400 transition-colors duration-200 text-gray-800"
                   dir="ltr"
-                  maxLength={6}
+                  maxLength={4}
                   autoFocus
                 />
               </div>

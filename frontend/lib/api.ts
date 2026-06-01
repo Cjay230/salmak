@@ -8,29 +8,21 @@ export interface AlertResponse {
   distanceMeters?: number;
 }
 
-export interface RegisterResponse {
-  success?: boolean;
-  isNewUser?: boolean;
-  message?: string;
-  token?: string;
+export interface UserResponse {
+  registered: boolean;
+  phoneNumber?: string;
+  name?: string;
+  lat?: number;
+  lng?: number;
+  emergencyContact?: string;
+  peopleInHouse?: number;
 }
 
-export async function sendVerificationCode(phoneNumber: string): Promise<RegisterResponse> {
-  const res = await fetch(`${API_BASE}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phoneNumber }),
-  });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
-  return res.json();
-}
-
-export async function verifyCode(phoneNumber: string, code: string): Promise<RegisterResponse> {
-  const res = await fetch(`${API_BASE}/register`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ phoneNumber, code }),
-  });
+export async function checkUser(phoneNumber: string): Promise<UserResponse> {
+  const res = await fetch(
+    `${API_BASE}/user/${encodeURIComponent(phoneNumber)}`,
+    { cache: 'no-store' }
+  );
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
 }

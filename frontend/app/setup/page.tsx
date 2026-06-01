@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Logo from '@/components/Logo';
+import type { MapLocation } from '@/components/MapPicker';
 
 const MapPicker = dynamic(() => import('@/components/MapPicker'), {
   ssr: false,
@@ -16,15 +17,74 @@ const MapPicker = dynamic(() => import('@/components/MapPicker'), {
   ),
 });
 
+function clamp(value: number, min: number, max: number) {
+  return Math.min(Math.max(value, min), max);
+}
+
 export default function SetupPage() {
   const router = useRouter();
-  const [location, setLocation] = useState<{ lat: number; lng: number } | null>(null);
+  const [location, setLocation] = useState<MapLocation | null>(null);
   const [name, setName] = useState('');
   const [emergencyContact, setEmergencyContact] = useState('');
   const [peopleCount, setPeopleCount] = useState('1');
   const [idPhoto, setIdPhoto] = useState<File | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+
+  // GPS state
+  const [gpsLoading, setGpsLoading] = useState(false);
+  const [gpsError, setGpsError] = useState('');
+
+  // Manual coordinate inputs
+  const [latInput, setLatInput] = useState('');
+  const [lngInput, setLngInput] = useState('');
+  const [manualError, setManualError] = useState('');
+
+  const applyLocation = (lat: number, lng: number) => {
+    setLocation({ lat, lng });
+    setLatInput(lat.toFixed(6));
+    setLngInput(lng.toFixed(6));
+    setGpsError('');
+    setManualError('');
+  };
+
+  const handleUseMyLocation = () => {
+    if (!navigator.geolocation) {
+      setGpsError('خدمة الموقع غير متاحة — Geolocation not supported on this device');
+      return;
+    }
+    setGpsLoading(true);
+    setGpsError('');
+    navigator.geolocation.getCurrentPosition(
+      (pos) => {
+        applyLocation(pos.coords.latitude, pos.coords.longitude);
+        setGpsLoading(false);
+      },
+      () => {
+        setGpsError('تعذّر الوصول إلى الموقع — Could not get your location. Check permissions.');
+        setGpsLoading(false);
+      },
+      { timeout: 10_000, enableHighAccuracy: true }
+    );
+  };
+
+  const handleSetManualLocation = () => {
+    const lat = parseFloat(latInput);
+    const lng = parseFloat(lngInput);
+    if (isNaN(lat) || isNaN(lng)) {
+      setManualError('أدخل أرقاماً صحيحة — Enter valid numbers');
+      return;
+    }
+    if (lat < -90 || lat > 90) {
+      setManualError('خط العرض بين -90 و 90 — Latitude must be between -90 and 90');
+      return;
+    }
+    if (lng < -180 || lng > 180) {
+      setManualError('خط الطول بين -180 و 180 — Longitude must be between -180 and 180');
+      return;
+    }
+    applyLocation(clamp(lat, -90, 90), clamp(lng, -180, 180));
+  };
 
   const handleSave = async () => {
     if (!name.trim()) {
@@ -68,18 +128,114 @@ export default function SetupPage() {
               📍 حدد موقع منزلك
             </label>
             <p className="text-gray-400 text-xs mb-2">
-              Tap on the map to pin your home location
+              Pin your home location on the map
             </p>
+
+            {/* Map tile */}
             <div className="rounded-2xl overflow-hidden border-2 border-gray-100">
-              <MapPicker onLocationSelect={(lat, lng) => setLocation({ lat, lng })} />
+              <MapPicker
+                location={location}
+                onLocationSelect={(lat, lng) => applyLocation(lat, lng)}
+              />
             </div>
+
+            {/* Pin status */}
             {location ? (
               <p className="text-xs text-sky-500 mt-2 text-center font-medium">
-                ✓ موقع محدد — {location.lat.toFixed(4)}, {location.lng.toFixed(4)}
+                ✓ موقع محدد — {location.lat.toFixed(5)}, {location.lng.toFixed(5)}
               </p>
             ) : (
-              <p className="text-xs text-gray-300 mt-2 text-center">اضغط على الخريطة / Tap the map</p>
+              <p className="text-xs text-gray-300 mt-2 text-center">
+                اضغط على الخريطة لتحديد الموقع / Tap the map to place a pin
+              </p>
             )}
+
+            {/* ── Option 1: GPS ── */}
+            <button
+              type="button"
+              onClick={handleUseMyLocation}
+              disabled={gpsLoading}
+              className="mt-4 w-full flex items-center justify-center gap-2.5 border-2 border-sky-300 text-sky-600 bg-sky-50 hover:bg-sky-100 active:bg-sky-200 disabled:opacity-60 font-semibold py-3 rounded-2xl transition-colors duration-200 text-sm"
+            >
+              {gpsLoading ? (
+                <>
+                  <span className="w-4 h-4 border-2 border-sky-400 border-t-transparent rounded-full animate-spin" />
+                  <span>جارٍ تحديد الموقع... — Getting location...</span>
+                </>
+              ) : (
+                <>
+                  <span className="text-base">📡</span>
+                  <span>
+                    <span dir="rtl" className="block leading-tight">استخدم موقعي الحالي</span>
+                    <span className="block text-xs font-normal text-sky-400 leading-tight">
+                      Use my current location
+                    </span>
+                  </span>
+                </>
+              )}
+            </button>
+
+            {gpsError && (
+              <p className="text-red-400 text-xs mt-2 text-center leading-relaxed">{gpsError}</p>
+            )}
+
+            {/* ── Divider ── */}
+            <div className="flex items-center gap-3 my-4">
+              <div className="flex-1 h-px bg-gray-100" />
+              <span className="text-gray-300 text-xs font-medium">أو / or</span>
+              <div className="flex-1 h-px bg-gray-100" />
+            </div>
+
+            {/* ── Option 2: Manual coordinates ── */}
+            <div>
+              <p className="text-xs font-semibold text-gray-500 mb-2 text-center" dir="rtl">
+                إدخال الإحداثيات يدوياً
+                <span className="font-normal text-gray-400"> — Enter coordinates manually</span>
+              </p>
+              <div className="flex gap-2">
+                <div className="flex-1">
+                  <label className="block text-xs text-gray-400 mb-1 text-center">
+                    خط العرض / Lat
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={latInput}
+                    onChange={(e) => { setLatInput(e.target.value); setManualError(''); }}
+                    placeholder="33.8938"
+                    className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-mono outline-none focus:border-sky-400 transition-colors text-gray-700"
+                    dir="ltr"
+                  />
+                </div>
+                <div className="flex-1">
+                  <label className="block text-xs text-gray-400 mb-1 text-center">
+                    خط الطول / Lng
+                  </label>
+                  <input
+                    type="text"
+                    inputMode="decimal"
+                    value={lngInput}
+                    onChange={(e) => { setLngInput(e.target.value); setManualError(''); }}
+                    placeholder="35.5018"
+                    className="w-full border-2 border-gray-200 rounded-xl px-3 py-2.5 text-center text-sm font-mono outline-none focus:border-sky-400 transition-colors text-gray-700"
+                    dir="ltr"
+                  />
+                </div>
+              </div>
+
+              {manualError && (
+                <p className="text-red-400 text-xs mt-1.5 text-center">{manualError}</p>
+              )}
+
+              <button
+                type="button"
+                onClick={handleSetManualLocation}
+                className="mt-2.5 w-full border-2 border-gray-200 text-gray-600 bg-gray-50 hover:bg-gray-100 font-semibold py-2.5 rounded-xl transition-colors duration-200 text-sm"
+              >
+                <span dir="rtl">تحديد الموقع</span>
+                <span className="text-gray-400 font-normal"> — Set Location</span>
+              </button>
+            </div>
           </div>
 
           {/* Full name */}

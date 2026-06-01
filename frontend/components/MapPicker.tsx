@@ -1,7 +1,7 @@
 'use client';
 
-import { useState } from 'react';
-import { MapContainer, TileLayer, Marker, useMapEvents } from 'react-leaflet';
+import { useEffect, useRef } from 'react';
+import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -15,24 +15,46 @@ const customIcon = L.icon({
   shadowSize: [41, 41],
 });
 
-function LocationMarker({ onSelect }: { onSelect: (lat: number, lng: number) => void }) {
-  const [position, setPosition] = useState<L.LatLng | null>(null);
+// Flies the map to a new position whenever it changes, skipping identical coords.
+function MapController({ position }: { position: [number, number] | null }) {
+  const map = useMap();
+  const prevKey = useRef('');
 
+  useEffect(() => {
+    if (!position) return;
+    const key = `${position[0].toFixed(6)},${position[1].toFixed(6)}`;
+    if (key === prevKey.current) return;
+    prevKey.current = key;
+    map.flyTo(position, Math.max(map.getZoom(), 15), { duration: 1 });
+  }, [position, map]);
+
+  return null;
+}
+
+function ClickHandler({ onSelect }: { onSelect: (lat: number, lng: number) => void }) {
   useMapEvents({
     click(e) {
-      setPosition(e.latlng);
       onSelect(e.latlng.lat, e.latlng.lng);
     },
   });
-
-  return position ? <Marker position={position} icon={customIcon} /> : null;
+  return null;
 }
 
-export default function MapPicker({
-  onLocationSelect,
-}: {
+export interface MapLocation {
+  lat: number;
+  lng: number;
+}
+
+interface MapPickerProps {
+  location: MapLocation | null;
   onLocationSelect: (lat: number, lng: number) => void;
-}) {
+}
+
+export default function MapPicker({ location, onLocationSelect }: MapPickerProps) {
+  const markerPos: [number, number] | null = location
+    ? [location.lat, location.lng]
+    : null;
+
   return (
     <MapContainer
       center={[33.8938, 35.5018]}
@@ -44,7 +66,9 @@ export default function MapPicker({
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       />
-      <LocationMarker onSelect={onLocationSelect} />
+      <MapController position={markerPos} />
+      <ClickHandler onSelect={onLocationSelect} />
+      {markerPos && <Marker position={markerPos} icon={customIcon} />}
     </MapContainer>
   );
 }
