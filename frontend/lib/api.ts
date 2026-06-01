@@ -19,12 +19,27 @@ export interface UserResponse {
 }
 
 export async function checkUser(phoneNumber: string): Promise<UserResponse> {
-  const res = await fetch(
-    `${API_BASE}/user/${encodeURIComponent(phoneNumber)}`,
-    { cache: 'no-store' }
-  );
+  const res = await fetch(`${API_BASE}/user/${phoneNumber}`, { cache: 'no-store' });
   if (!res.ok) throw new Error(`HTTP ${res.status}`);
   return res.json();
+}
+
+export interface RegisterPayload {
+  phoneNumber: string;
+  name: string;
+  lat: number | null;
+  lng: number | null;
+  emergencyContact: string | null;
+  peopleInHouse: number;
+}
+
+export async function registerUser(payload: RegisterPayload): Promise<void> {
+  const res = await fetch(`${API_BASE}/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
 }
 
 export async function getAlert(phoneNumber: string): Promise<AlertResponse> {

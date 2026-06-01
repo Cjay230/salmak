@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import Logo from '@/components/Logo';
 import type { MapLocation } from '@/components/MapPicker';
+import { registerUser } from '@/lib/api';
 
 const MapPicker = dynamic(() => import('@/components/MapPicker'), {
   ssr: false,
@@ -92,16 +93,26 @@ export default function SetupPage() {
       return;
     }
     setLoading(true);
+    setError('');
     try {
-      const userData = {
+      const phoneNumber = localStorage.getItem('salmak_phone') ?? '';
+      const formattedContact = emergencyContact
+        ? `+961${emergencyContact.replace(/^0+/, '').replace(/\s/g, '')}`
+        : null;
+
+      await registerUser({
+        phoneNumber,
         name: name.trim(),
-        emergencyContact: emergencyContact
-          ? `+961${emergencyContact.replace(/^0+/, '').replace(/\s/g, '')}`
-          : null,
-        peopleCount: parseInt(peopleCount),
-        location,
-      };
-      localStorage.setItem('salmak_user_data', JSON.stringify(userData));
+        lat: location?.lat ?? null,
+        lng: location?.lng ?? null,
+        emergencyContact: formattedContact,
+        peopleInHouse: parseInt(peopleCount),
+      });
+
+      localStorage.setItem(
+        'salmak_user_data',
+        JSON.stringify({ name: name.trim(), emergencyContact: formattedContact, location })
+      );
       router.push('/home');
     } catch {
       setError('فشل حفظ البيانات — Failed to save. Please try again.');

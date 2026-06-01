@@ -16,14 +16,20 @@ export default function HomePage() {
     async (phoneNumber: string) => {
       setChecking(true);
       try {
+        console.log('[Salmak] polling alert for:', phoneNumber);
         const data = await getAlert(phoneNumber);
+        console.log('[Salmak] alert response:', data);
         setLastChecked(new Date());
         setCountdown(30);
         if (data.hasAlert) {
+          console.log('[Salmak] hasAlert=true — calling router.push("/alert")');
           localStorage.setItem('salmak_alert_data', JSON.stringify(data));
           router.push('/alert');
+        } else {
+          console.log('[Salmak] hasAlert=false — staying on home');
         }
-      } catch {
+      } catch (err) {
+        console.error('[Salmak] getAlert error:', err);
         setLastChecked(new Date());
         setCountdown(30);
       } finally {
