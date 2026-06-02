@@ -34,12 +34,18 @@ export interface RegisterPayload {
 }
 
 export async function registerUser(payload: RegisterPayload): Promise<void> {
+  const body = JSON.stringify(payload);
+  console.log('[Salmak] POST /register body:', body);
   const res = await fetch(`${API_BASE}/register`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
+    body,
   });
-  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+  if (!res.ok) {
+    const text = await res.text();
+    console.error('[Salmak] POST /register failed:', res.status, text);
+    throw new Error(`HTTP ${res.status}`);
+  }
 }
 
 export async function getAlert(phoneNumber: string): Promise<AlertResponse> {

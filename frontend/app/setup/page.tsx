@@ -92,6 +92,10 @@ export default function SetupPage() {
       setError('الرجاء إدخال اسمك الكامل — Please enter your full name');
       return;
     }
+    if (!location) {
+      setError('الرجاء تحديد موقع منزلك — Please set your home location on the map');
+      return;
+    }
     setLoading(true);
     setError('');
     try {
