@@ -17,6 +17,7 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
     private final UserHandler      userHandler;
     private final AlertHandler     alertHandler;
     private final GetAlertHandler  getAlertHandler;
+    private final SafeHandler      safeHandler;
 
     /** Production constructor. */
     public App() {
@@ -24,30 +25,39 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
         this.userHandler      = new UserHandler();
         this.alertHandler     = new AlertHandler();
         this.getAlertHandler  = new GetAlertHandler();
+        this.safeHandler      = new SafeHandler();
     }
 
     /** Full test constructor — accepts pre-configured handlers. */
     App(RegisterHandler registerHandler, UserHandler userHandler,
-        AlertHandler alertHandler, GetAlertHandler getAlertHandler) {
+        AlertHandler alertHandler, GetAlertHandler getAlertHandler,
+        SafeHandler safeHandler) {
         this.registerHandler  = registerHandler;
         this.userHandler      = userHandler;
         this.alertHandler     = alertHandler;
         this.getAlertHandler  = getAlertHandler;
+        this.safeHandler      = safeHandler;
+    }
+
+    /** Convenience test constructor for register + user + alert + getAlert tests. */
+    App(RegisterHandler registerHandler, UserHandler userHandler,
+        AlertHandler alertHandler, GetAlertHandler getAlertHandler) {
+        this(registerHandler, userHandler, alertHandler, getAlertHandler, new SafeHandler());
     }
 
     /** Convenience test constructor for register + user + alert tests. */
     App(RegisterHandler registerHandler, UserHandler userHandler, AlertHandler alertHandler) {
-        this(registerHandler, userHandler, alertHandler, new GetAlertHandler());
+        this(registerHandler, userHandler, alertHandler, new GetAlertHandler(), new SafeHandler());
     }
 
     /** Convenience test constructor for register + user tests. */
     App(RegisterHandler registerHandler, UserHandler userHandler) {
-        this(registerHandler, userHandler, new AlertHandler(), new GetAlertHandler());
+        this(registerHandler, userHandler, new AlertHandler(), new GetAlertHandler(), new SafeHandler());
     }
 
     /** Convenience test constructor for register-only tests. */
     App(RegisterHandler registerHandler) {
-        this(registerHandler, new UserHandler(), new AlertHandler(), new GetAlertHandler());
+        this(registerHandler, new UserHandler(), new AlertHandler(), new GetAlertHandler(), new SafeHandler());
     }
 
     @Override
@@ -71,13 +81,27 @@ public class App implements RequestHandler<APIGatewayProxyRequestEvent, APIGatew
             return getAlertHandler.handle(input, context);
         }
 
+        if ("POST".equalsIgnoreCase(method) && "/safe".equals(path)) {
+            return safeHandler.handle(input, context);
+        }
+
+        // Handle CORS preflight for all routes
+        if ("OPTIONS".equalsIgnoreCase(method)) {
+            return response(200, "");
+        }
+
         return response(404, "{\"message\":\"Not found\"}");
     }
 
     static APIGatewayProxyResponseEvent response(int statusCode, String body) {
         return new APIGatewayProxyResponseEvent()
                 .withStatusCode(statusCode)
-                .withHeaders(Map.of("Content-Type", "application/json"))
+                .withHeaders(Map.of(
+                        "Content-Type", "application/json",
+                        "Access-Control-Allow-Origin", "*",
+                        "Access-Control-Allow-Methods", "GET, POST, OPTIONS",
+                        "Access-Control-Allow-Headers", "Content-Type"
+                ))
                 .withBody(body);
     }
 }

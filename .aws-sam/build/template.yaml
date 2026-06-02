@@ -9,6 +9,11 @@ Globals:
   Function:
     Timeout: 20
     MemorySize: 512
+  Api:
+    Cors:
+      AllowMethods: '''GET,POST,OPTIONS'''
+      AllowHeaders: '''Content-Type'''
+      AllowOrigin: '''*'''
 Resources:
   SalmakFunction:
     Type: AWS::Serverless::Function
@@ -32,21 +37,51 @@ Resources:
           Properties:
             Path: /register
             Method: post
+        RegisterUserOptions:
+          Type: Api
+          Properties:
+            Path: /register
+            Method: options
         GetUser:
           Type: Api
           Properties:
             Path: /user/{phoneNumber}
             Method: get
+        GetUserOptions:
+          Type: Api
+          Properties:
+            Path: /user/{phoneNumber}
+            Method: options
         PostAlert:
           Type: Api
           Properties:
             Path: /alert
             Method: post
+        PostAlertOptions:
+          Type: Api
+          Properties:
+            Path: /alert
+            Method: options
         GetAlert:
           Type: Api
           Properties:
             Path: /alert/{phoneNumber}
             Method: get
+        GetAlertOptions:
+          Type: Api
+          Properties:
+            Path: /alert/{phoneNumber}
+            Method: options
+        PostSafe:
+          Type: Api
+          Properties:
+            Path: /safe
+            Method: post
+        PostSafeOptions:
+          Type: Api
+          Properties:
+            Path: /safe
+            Method: options
     Metadata:
       SamResourceId: SalmakFunction
 Outputs:

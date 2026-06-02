@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.AlertHandlerTest" time="0.354" tests="10" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.AlertHandlerTest" time="0.358" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -15,7 +15,7 @@
     <property name="sun.java.launcher" value="SUN_STANDARD"/>
     <property name="user.country" value="US"/>
     <property name="sun.boot.library.path" value="C:\Program Files\Amazon Corretto\jdk21.0.11_10\bin"/>
-    <property name="sun.java.command" value="C:\Users\user\AppData\Local\Temp\surefire6583390446307420224\surefirebooter-20260531204826466_3.jar C:\Users\user\AppData\Local\Temp\surefire6583390446307420224 2026-05-31T20-48-26_326-jvmRun1 surefire-20260531204826466_1tmp surefire_0-20260531204826466_2tmp"/>
+    <property name="sun.java.command" value="C:\Users\user\AppData\Local\Temp\surefire2882020175295664866\surefirebooter-20260602131026812_3.jar C:\Users\user\AppData\Local\Temp\surefire2882020175295664866 2026-06-02T13-10-26_642-jvmRun1 surefire-20260602131026812_1tmp surefire_0-20260602131026812_2tmp"/>
     <property name="jdk.debug" value="release"/>
     <property name="surefire.test.class.path" value="C:\Users\user\Desktop\proj\SALMAK\salmak\SalmakFunction\target\test-classes;C:\Users\user\Desktop\proj\SALMAK\salmak\SalmakFunction\target\classes;C:\Users\user\.m2\repository\com\amazonaws\aws-lambda-java-core\1.2.2\aws-lambda-java-core-1.2.2.jar;C:\Users\user\.m2\repository\com\amazonaws\aws-lambda-java-events\3.11.0\aws-lambda-java-events-3.11.0.jar;C:\Users\user\.m2\repository\joda-time\joda-time\2.6\joda-time-2.6.jar;C:\Users\user\.m2\repository\junit\junit\4.13.2\junit-4.13.2.jar;C:\Users\user\.m2\repository\org\hamcrest\hamcrest-core\1.3\hamcrest-core-1.3.jar;C:\Users\user\.m2\repository\com\fasterxml\jackson\core\jackson-databind\2.17.1\jackson-databind-2.17.1.jar;C:\Users\user\.m2\repository\com\fasterxml\jackson\core\jackson-annotations\2.17.1\jackson-annotations-2.17.1.jar;C:\Users\user\.m2\repository\com\fasterxml\jackson\core\jackson-core\2.17.1\jackson-core-2.17.1.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\dynamodb\2.25.60\dynamodb-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\aws-json-protocol\2.25.60\aws-json-protocol-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\third-party-jackson-core\2.25.60\third-party-jackson-core-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\protocol-core\2.25.60\protocol-core-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\profiles\2.25.60\profiles-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\http-auth-aws\2.25.60\http-auth-aws-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\checksums-spi\2.25.60\checksums-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\checksums\2.25.60\checksums-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\sdk-core\2.25.60\sdk-core-2.25.60.jar;C:\Users\user\.m2\repository\org\reactivestreams\reactive-streams\1.0.4\reactive-streams-1.0.4.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\auth\2.25.60\auth-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\eventstream\eventstream\1.0.1\eventstream-1.0.1.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\http-auth-spi\2.25.60\http-auth-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\http-auth\2.25.60\http-auth-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\identity-spi\2.25.60\identity-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\http-client-spi\2.25.60\http-client-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\regions\2.25.60\regions-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\annotations\2.25.60\annotations-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\utils\2.25.60\utils-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\aws-core\2.25.60\aws-core-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\metrics-spi\2.25.60\metrics-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\json-utils\2.25.60\json-utils-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\endpoints-spi\2.25.60\endpoints-spi-2.25.60.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\apache-client\2.25.60\apache-client-2.25.60.jar;C:\Users\user\.m2\repository\org\apache\httpcomponents\httpclient\4.5.13\httpclient-4.5.13.jar;C:\Users\user\.m2\repository\commons-logging\commons-logging\1.2\commons-logging-1.2.jar;C:\Users\user\.m2\repository\org\apache\httpcomponents\httpcore\4.4.13\httpcore-4.4.13.jar;C:\Users\user\.m2\repository\commons-codec\commons-codec\1.15\commons-codec-1.15.jar;C:\Users\user\.m2\repository\software\amazon\awssdk\netty-nio-client\2.25.60\netty-nio-client-2.25.60.jar;C:\Users\user\.m2\repository\io\netty\netty-codec-http\4.1.108.Final\netty-codec-http-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-codec-http2\4.1.108.Final\netty-codec-http2-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-codec\4.1.108.Final\netty-codec-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-transport\4.1.108.Final\netty-transport-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-common\4.1.108.Final\netty-common-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-buffer\4.1.108.Final\netty-buffer-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-handler\4.1.108.Final\netty-handler-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-transport-native-unix-common\4.1.108.Final\netty-transport-native-unix-common-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-transport-classes-epoll\4.1.108.Final\netty-transport-classes-epoll-4.1.108.Final.jar;C:\Users\user\.m2\repository\io\netty\netty-resolver\4.1.108.Final\netty-resolver-4.1.108.Final.jar;C:\Users\user\.m2\repository\org\slf4j\slf4j-simple\2.0.13\slf4j-simple-2.0.13.jar;C:\Users\user\.m2\repository\org\slf4j\slf4j-api\2.0.13\slf4j-api-2.0.13.jar;"/>
     <property name="sun.cpu.endian" value="little"/>
@@ -30,7 +30,7 @@
     <property name="line.separator" value="&#10;"/>
     <property name="java.vm.specification.vendor" value="Oracle Corporation"/>
     <property name="java.specification.name" value="Java Platform API Specification"/>
-    <property name="surefire.real.class.path" value="C:\Users\user\AppData\Local\Temp\surefire6583390446307420224\surefirebooter-20260531204826466_3.jar"/>
+    <property name="surefire.real.class.path" value="C:\Users\user\AppData\Local\Temp\surefire2882020175295664866\surefirebooter-20260602131026812_3.jar"/>
     <property name="user.script" value=""/>
     <property name="sun.management.compiler" value="HotSpot 64-Bit Tiered Compilers"/>
     <property name="java.runtime.version" value="21.0.11+10-LTS"/>
@@ -51,7 +51,7 @@
     <property name="java.vm.specification.name" value="Java Virtual Machine Specification"/>
     <property name="sun.os.patch.level" value=""/>
     <property name="native.encoding" value="Cp1252"/>
-    <property name="java.library.path" value="C:\Program Files\Amazon Corretto\jdk21.0.11_10\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Amazon Corretto\jdk21.0.11_10\bin;C:\Users\user\Desktop\desktop\apache-maven-3.9.16\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\Tailscale\;C:\Program Files\Amazon\AWSSAMCLI\bin\;C:\Program Files\Amazon\AWSCLIV2\;C:\OrCAD\OrCAD_16.6_Lite\tools\pcb\bin;C:\OrCAD\OrCAD_16.6_Lite\tools\fet\bin;C:\OrCAD\OrCAD_16.6_Lite\OpenAccess\bin\win32\opt;C:\OrCAD\OrCAD_16.6_Lite\tools\bin;C:\OrCAD\OrCAD_16.6_Lite\tools\Capture;C:\OrCAD\OrCAD_16.6_Lite\tools\PSpice;C:\Users\user\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python311\;C:\Users\user\AppData\Local\Programs\Python\Python314\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python314\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\msys64\ucrt64\bin;C:\Users\user\AppData\Local\Programs\Antigravity\bin;C:\Users\user\AppData\Local\Programs\Kiro\bin;."/>
+    <property name="java.library.path" value="C:\Program Files\Amazon Corretto\jdk21.0.11_10\bin;C:\WINDOWS\Sun\Java\bin;C:\WINDOWS\system32;C:\WINDOWS;C:\Program Files\Amazon Corretto\jdk21.0.11_10\bin;C:\Users\user\Desktop\desktop\apache-maven-3.9.16\bin;C:\Program Files (x86)\Common Files\Oracle\Java\javapath;C:\WINDOWS\system32;C:\WINDOWS;C:\WINDOWS\System32\Wbem;C:\WINDOWS\System32\WindowsPowerShell\v1.0\;C:\WINDOWS\System32\OpenSSH\;C:\Program Files\Git\cmd;C:\Program Files\Tailscale\;C:\Program Files\Amazon\AWSSAMCLI\bin\;C:\Program Files\Amazon\AWSCLIV2\;C:\Program Files\nodejs\;C:\OrCAD\OrCAD_16.6_Lite\tools\pcb\bin;C:\OrCAD\OrCAD_16.6_Lite\tools\fet\bin;C:\OrCAD\OrCAD_16.6_Lite\OpenAccess\bin\win32\opt;C:\OrCAD\OrCAD_16.6_Lite\tools\bin;C:\OrCAD\OrCAD_16.6_Lite\tools\Capture;C:\OrCAD\OrCAD_16.6_Lite\tools\PSpice;C:\Users\user\AppData\Local\Programs\Python\Python311\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python311\;C:\Users\user\AppData\Local\Programs\Python\Python314\Scripts\;C:\Users\user\AppData\Local\Programs\Python\Python314\;C:\Users\user\AppData\Local\Microsoft\WindowsApps;C:\Users\user\AppData\Local\Programs\Microsoft VS Code\bin;C:\msys64\ucrt64\bin;C:\Users\user\AppData\Local\Programs\Antigravity\bin;C:\Users\user\AppData\Local\Programs\Kiro\bin;C:\Users\user\AppData\Roaming\npm;."/>
     <property name="java.vm.info" value="mixed mode, sharing"/>
     <property name="stderr.encoding" value="Cp1252"/>
     <property name="java.vendor" value="Amazon.com Inc."/>
@@ -59,14 +59,14 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="mixedUsers_onlyNearbyAlerted" classname="com.salmak.AlertHandlerTest" time="0.283">
+  <testcase name="mixedUsers_onlyNearbyAlerted" classname="com.salmak.AlertHandlerTest" time="0.303">
     <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
 Alerted user: +96170000003
 Alerted user: +96170000005
 Alert complete — users alerted: 2
 ]]></system-out>
   </testcase>
-  <testcase name="oneUserBeyond500m_isNotAlerted" classname="com.salmak.AlertHandlerTest" time="0.0">
+  <testcase name="oneUserBeyond500m_isNotAlerted" classname="com.salmak.AlertHandlerTest" time="0.002">
     <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
 Alert complete — users alerted: 0
 ]]></system-out>
@@ -75,7 +75,7 @@ Alert complete — users alerted: 0
   <testcase name="missingLat_returns400" classname="com.salmak.AlertHandlerTest" time="0.0"/>
   <testcase name="haversine_within500m_detected" classname="com.salmak.AlertHandlerTest" time="0.0"/>
   <testcase name="haversine_beyond500m_notDetected" classname="com.salmak.AlertHandlerTest" time="0.0"/>
-  <testcase name="noUsersInTable_returns200WithZeroAlerted" classname="com.salmak.AlertHandlerTest" time="0.004">
+  <testcase name="noUsersInTable_returns200WithZeroAlerted" classname="com.salmak.AlertHandlerTest" time="0.0">
     <system-out><![CDATA[Alert triggered at lat=33.893800 lng=35.501800
 Alert complete — users alerted: 0
 ]]></system-out>
@@ -86,7 +86,7 @@ Alerted user: +96170000001
 Alert complete — users alerted: 1
 ]]></system-out>
   </testcase>
-  <testcase name="missingBody_returns400" classname="com.salmak.AlertHandlerTest" time="0.002">
+  <testcase name="missingBody_returns400" classname="com.salmak.AlertHandlerTest" time="0.0">
     <system-out><![CDATA[Failed to parse alert body: Unrecognized token 'not': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
  at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 4]
 ]]></system-out>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.AppTest" time="0.023" tests="11" errors="0" skipped="0" failures="0">
+<testsuite xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="https://maven.apache.org/surefire/maven-surefire-plugin/xsd/surefire-test-report.xsd" version="3.0.2" name="com.salmak.SafeHandlerTest" time="0.008" tests="10" errors="0" skipped="0" failures="0">
   <properties>
     <property name="java.specification.version" value="21"/>
     <property name="sun.cpu.isalist" value="amd64"/>
@@ -59,43 +59,48 @@
     <property name="sun.io.unicode.encoding" value="UnicodeLittle"/>
     <property name="java.class.version" value="65.0"/>
   </properties>
-  <testcase name="register_missingName_returns400" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Validation failed — missing fields: name
+  <testcase name="corsHeaders_presentOn404" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
 ]]></system-out>
   </testcase>
-  <testcase name="register_invalidJson_returns400" classname="com.salmak.AppTest" time="0.0">
+  <testcase name="dynamoUpdateError_returns500" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+DynamoDB update failed for user +96170000000: Update failed
+]]></system-out>
+  </testcase>
+  <testcase name="userNotFound_returns404" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+]]></system-out>
+  </testcase>
+  <testcase name="routingViaApp_postSafe_success" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+Evacuation confirmed for user: +96170000000
+]]></system-out>
+  </testcase>
+  <testcase name="updateExpression_usesREMOVE" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+Evacuation confirmed for user: +96170000000
+]]></system-out>
+  </testcase>
+  <testcase name="invalidJson_returns400" classname="com.salmak.SafeHandlerTest" time="0.007">
     <system-out><![CDATA[Failed to parse request body: Unrecognized token 'not': was expecting (JSON String, Number, Array, Object or token 'null', 'true' or 'false')
  at [Source: REDACTED (`StreamReadFeature.INCLUDE_SOURCE_IN_LOCATION` disabled); line: 1, column: 4]
 ]]></system-out>
   </testcase>
-  <testcase name="unknownRoute_returns404" classname="com.salmak.AppTest" time="0.0"/>
-  <testcase name="register_withOptionalIdPhoto_returns200" classname="com.salmak.AppTest" time="0.012">
-    <system-out><![CDATA[Registered user: +96170000001
+  <testcase name="userFound_returns200AndConfirmsEvacuation" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+Evacuation confirmed for user: +96170000000
 ]]></system-out>
   </testcase>
-  <testcase name="register_missingPeopleInHouse_returns400" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Validation failed — missing fields: peopleInHouse
+  <testcase name="missingPhoneNumber_returns400" classname="com.salmak.SafeHandlerTest" time="0.0"/>
+  <testcase name="dynamoGetError_returns500" classname="com.salmak.SafeHandlerTest" time="0.001">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+DynamoDB lookup failed: DynamoDB unavailable
 ]]></system-out>
   </testcase>
-  <testcase name="register_missingCoordinates_returns400" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Validation failed — missing fields: coordinates
-]]></system-out>
-  </testcase>
-  <testcase name="register_missingPhoneNumber_returns400" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Validation failed — missing fields: phoneNumber
-]]></system-out>
-  </testcase>
-  <testcase name="register_allRequiredFields_returns200" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Registered user: +96170000000
-]]></system-out>
-  </testcase>
-  <testcase name="register_nullBody_returns400" classname="com.salmak.AppTest" time="0.0"/>
-  <testcase name="register_flatLatLng_returns200" classname="com.salmak.AppTest" time="0.011">
-    <system-out><![CDATA[Registered user: +96176676635
-]]></system-out>
-  </testcase>
-  <testcase name="register_missingEmergencyContact_returns400" classname="com.salmak.AppTest" time="0.0">
-    <system-out><![CDATA[Validation failed — missing fields: emergencyContact
+  <testcase name="corsHeaders_presentOnSuccess" classname="com.salmak.SafeHandlerTest" time="0.0">
+    <system-out><![CDATA[Safe confirmation for user: +96170000000
+Evacuation confirmed for user: +96170000000
 ]]></system-out>
   </testcase>
 </testsuite>

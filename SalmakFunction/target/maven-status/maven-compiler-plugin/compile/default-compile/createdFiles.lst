@@ -6,11 +6,14 @@ com\salmak\GetAlertHandler$1.class
 com\salmak\RegisterHandler$DynamoHolder.class
 com\salmak\AlertHandler$1.class
 com\salmak\RegisterHandler.class
+com\salmak\SafeHandler$1.class
 com\salmak\AlertHandler$DynamoHolder.class
+com\salmak\SafeHandler$DynamoHolder.class
 com\salmak\GetAlertHandler$DynamoHolder.class
 com\salmak\App.class
 com\salmak\AlertHandler.class
 com\salmak\RegisterRequest.class
 com\salmak\GetAlertHandler.class
 com\salmak\UserHandler$1.class
+com\salmak\SafeHandler.class
 com\salmak\AlertHandler$AlertRequest.class

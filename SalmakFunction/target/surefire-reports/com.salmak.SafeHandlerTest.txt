@@ -1,4 +1,4 @@
 -------------------------------------------------------------------------------
-Test set: com.salmak.AlertHandlerTest
+Test set: com.salmak.SafeHandlerTest
 -------------------------------------------------------------------------------
-Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.358 s -- in com.salmak.AlertHandlerTest
+Tests run: 10, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.008 s -- in com.salmak.SafeHandlerTest

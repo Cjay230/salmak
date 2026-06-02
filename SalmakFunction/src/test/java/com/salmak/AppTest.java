@@ -135,6 +135,20 @@ public class AppTest {
     }
 
     @Test
+    public void register_flatLatLng_returns200() {
+        // Flat lat/lng format sent by the mobile app — no nested "coordinates" object
+        String body = """
+                {"phoneNumber":"+96176676635","name":"CJ",
+                 "lat":33.8939,"lng":35.5018,
+                 "emergencyContact":"+96171227775","peopleInHouse":3}
+                """;
+        APIGatewayProxyResponseEvent res = postRegister(body);
+
+        assertEquals(200, res.getStatusCode().intValue());
+        assertTrue(res.getBody().contains("registered successfully"));
+    }
+
+    @Test
     public void register_withOptionalIdPhoto_returns200() {
         String body = """
                 {"phoneNumber":"+96170000001","name":"Sara",
@@ -145,6 +159,12 @@ public class AppTest {
         APIGatewayProxyResponseEvent res = postRegister(body);
 
         assertEquals(200, res.getStatusCode().intValue());
+    }
+
+    @Test
+    public void register_nullBody_returns400() {
+        APIGatewayProxyResponseEvent res = postRegister(null);
+        assertEquals(400, res.getStatusCode().intValue());
     }
 
     // -----------------------------------------------------------------------

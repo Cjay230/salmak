@@ -53,7 +53,11 @@ public class RegisterHandler {
         // --- Parse body ---
         RegisterRequest req;
         try {
-            req = MAPPER.readValue(input.getBody(), RegisterRequest.class);
+            String body = input.getBody();
+            if (body == null || body.isBlank()) {
+                return App.response(400, "{\"message\":\"Request body is empty\"}");
+            }
+            req = MAPPER.readValue(body, RegisterRequest.class);
         } catch (Exception e) {
             logger.log("Failed to parse request body: " + e.getMessage());
             return App.response(400, "{\"message\":\"Invalid JSON body\"}");
