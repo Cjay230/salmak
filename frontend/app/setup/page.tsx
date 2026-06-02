@@ -104,14 +104,16 @@ export default function SetupPage() {
         ? `+961${emergencyContact.replace(/^0+/, '').replace(/\s/g, '')}`
         : null;
 
-      await registerUser({
+      const payload = {
         phoneNumber,
         name: name.trim(),
         lat: location?.lat ?? null,
         lng: location?.lng ?? null,
         emergencyContact: formattedContact,
         peopleInHouse: parseInt(peopleCount),
-      });
+      };
+      console.log('Sending to register:', JSON.stringify(payload));
+      await registerUser(payload);
 
       localStorage.setItem(
         'salmak_user_data',

@@ -48,6 +48,15 @@ export async function registerUser(payload: RegisterPayload): Promise<void> {
   }
 }
 
+export async function markSafe(phoneNumber: string): Promise<void> {
+  const res = await fetch(`${API_BASE}/safe`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ phoneNumber }),
+  });
+  if (!res.ok) throw new Error(`HTTP ${res.status}`);
+}
+
 export async function getAlert(phoneNumber: string): Promise<AlertResponse> {
   const url = `${API_BASE}/alert/${phoneNumber}`;
   console.log('[Salmak] GET', url);

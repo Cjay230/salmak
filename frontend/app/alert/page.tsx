@@ -2,11 +2,12 @@
 
 import { useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAlert } from '@/lib/api';
+import { getAlert, markSafe } from '@/lib/api';
 
 export default function AlertPage() {
   const router = useRouter();
   const [evacuationRoute, setEvacuationRoute] = useState<string>('');
+  const [safeLoading, setSafeLoading] = useState(false);
 
   useEffect(() => {
     try {
@@ -97,6 +98,31 @@ export default function AlertPage() {
 
         {/* Action buttons */}
         <div className="w-full space-y-3 mt-auto">
+          <button
+            onClick={async () => {
+              const phone = localStorage.getItem('salmak_phone') ?? '';
+              setSafeLoading(true);
+              try {
+                await markSafe(phone);
+                localStorage.removeItem('salmak_alert_data');
+                router.push('/home');
+              } catch {
+                setSafeLoading(false);
+              }
+            }}
+            disabled={safeLoading}
+            className="flex items-center justify-center gap-4 w-full bg-green-500 hover:bg-green-600 active:bg-green-700 disabled:opacity-60 text-white font-bold py-5 rounded-2xl shadow-xl transition-all duration-150"
+          >
+            {safeLoading ? (
+              <span className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <span className="text-2xl">✅</span>
+            )}
+            <span>
+              <span className="block text-base" dir="rtl">أنا بأمان</span>
+              <span className="block text-xs font-normal text-green-100">I&apos;m Safe</span>
+            </span>
+          </button>
           <a
             href="tel:+9611140140"
             className="flex items-center justify-center gap-4 w-full bg-white text-red-600 font-bold py-5 rounded-2xl shadow-xl hover:bg-red-50 active:scale-98 transition-all duration-150"
